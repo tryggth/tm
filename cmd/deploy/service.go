@@ -61,6 +61,14 @@ type Service struct {
 	Wait           bool
 }
 
+type Config struct {
+	servingv1alpha1.Configuration
+}
+
+type Route struct {
+	servingv1alpha1.Route
+}
+
 // Deploy receives Service structure and generate knative/service object to deploy it in knative cluster
 func (s *Service) Deploy(clientset *client.ConfigSet) error {
 	fmt.Printf("Creating %s function\n", s.Name)
@@ -137,9 +145,7 @@ func (s *Service) Deploy(clientset *client.ConfigSet) error {
 	configuration.RevisionTemplate.Spec.Container.ImagePullPolicy = corev1.PullPolicy(s.PullPolicy)
 
 	spec := servingv1alpha1.ServiceSpec{
-		RunLatest: &servingv1alpha1.RunLatestType{
-			Configuration: configuration,
-		},
+		Manual: &servingv1alpha1.ManualType{},
 	}
 
 	serviceObject := servingv1alpha1.Service{
@@ -160,7 +166,54 @@ func (s *Service) Deploy(clientset *client.ConfigSet) error {
 		Spec: spec,
 	}
 
-	if err := s.createOrUpdate(serviceObject, clientset); err != nil {
+	service, err := s.createOrUpdate(serviceObject, clientset)
+	if err != nil {
+		return err
+	}
+
+	c := Config{
+		servingv1alpha1.Configuration{
+			TypeMeta: metav1.TypeMeta{
+				Kind:       "Configuration",
+				APIVersion: "serving.knative.dev/v1alpha1",
+			},
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      s.Name,
+				Namespace: clientset.Namespace,
+				OwnerReferences: []metav1.OwnerReference{
+					{APIVersion: "serving.knative.dev/v1alpha1", Kind: "Service", Name: s.Name, UID: service.UID},
+				},
+			},
+			Spec: configuration,
+		},
+	}
+
+	if err := c.createOrUpdate(clientset); err != nil {
+		return err
+	}
+
+	r := Route{
+		servingv1alpha1.Route{
+			TypeMeta: metav1.TypeMeta{
+				Kind:       "Configuration",
+				APIVersion: "serving.knative.dev/v1alpha1",
+			},
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      s.Name,
+				Namespace: clientset.Namespace,
+				OwnerReferences: []metav1.OwnerReference{
+					{APIVersion: "serving.knative.dev/v1alpha1", Kind: "Service", Name: s.Name, UID: service.UID},
+				},
+			},
+			Spec: servingv1alpha1.RouteSpec{
+				Traffic: []servingv1alpha1.TrafficTarget{
+					{Name: "foo", ConfigurationName: s.Name, Percent: 100},
+				},
+			},
+		},
+	}
+
+	if err := r.createOrUpdate(clientset); err != nil {
 		return err
 	}
 
@@ -182,15 +235,42 @@ func (s *Service) Deploy(clientset *client.ConfigSet) error {
 	return nil
 }
 
-func (s *Service) createOrUpdate(serviceObject servingv1alpha1.Service, clientset *client.ConfigSet) error {
-	_, err := clientset.Serving.ServingV1alpha1().Services(clientset.Namespace).Create(&serviceObject)
+func (s *Service) createOrUpdate(serviceObject servingv1alpha1.Service, clientset *client.ConfigSet) (*servingv1alpha1.Service, error) {
+	service, err := clientset.Serving.ServingV1alpha1().Services(clientset.Namespace).Create(&serviceObject)
 	if k8sErrors.IsAlreadyExists(err) {
-		service, err := clientset.Serving.ServingV1alpha1().Services(clientset.Namespace).Get(serviceObject.ObjectMeta.Name, metav1.GetOptions{})
+		service, err = clientset.Serving.ServingV1alpha1().Services(clientset.Namespace).Get(serviceObject.ObjectMeta.Name, metav1.GetOptions{})
+		if err != nil {
+			return service, err
+		}
+		serviceObject.ObjectMeta.ResourceVersion = service.GetResourceVersion()
+		return clientset.Serving.ServingV1alpha1().Services(clientset.Namespace).Update(&serviceObject)
+	}
+	return service, err
+}
+
+func (c *Config) createOrUpdate(clientset *client.ConfigSet) error {
+	_, err := clientset.Serving.ServingV1alpha1().Configurations(clientset.Namespace).Create(&c.Configuration)
+	if k8sErrors.IsAlreadyExists(err) {
+		oldConfig, err := clientset.Serving.ServingV1alpha1().Configurations(clientset.Namespace).Get(c.Configuration.GetName(), metav1.GetOptions{})
 		if err != nil {
 			return err
 		}
-		serviceObject.ObjectMeta.ResourceVersion = service.GetResourceVersion()
-		_, err = clientset.Serving.ServingV1alpha1().Services(clientset.Namespace).Update(&serviceObject)
+		c.Configuration.ObjectMeta.ResourceVersion = oldConfig.GetResourceVersion()
+		_, err = clientset.Serving.ServingV1alpha1().Configurations(clientset.Namespace).Update(&c.Configuration)
+		return err
+	}
+	return err
+}
+
+func (r *Route) createOrUpdate(clientset *client.ConfigSet) error {
+	_, err := clientset.Serving.ServingV1alpha1().Routes(clientset.Namespace).Create(&r.Route)
+	if k8sErrors.IsAlreadyExists(err) {
+		oldRoute, err := clientset.Serving.ServingV1alpha1().Routes(clientset.Namespace).Get(r.GetName(), metav1.GetOptions{})
+		if err != nil {
+			return err
+		}
+		r.Route.ObjectMeta.ResourceVersion = oldRoute.GetResourceVersion()
+		_, err = clientset.Serving.ServingV1alpha1().Routes(clientset.Namespace).Update(&r.Route)
 		return err
 	}
 	return err
