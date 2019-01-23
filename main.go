@@ -16,7 +16,7 @@ limitations under the License.
 
 package main
 
-import "github.com/triggermesh/tm/cmd"
+import "github.com/tryggth/tm/cmd"
 
 func main() {
 	cmd.Execute()

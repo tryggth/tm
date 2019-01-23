@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/spf13/cobra"
-	"github.com/triggermesh/tm/pkg/client"
+	"github.com/tryggth/tm/pkg/client"
 )
 
 var r Route

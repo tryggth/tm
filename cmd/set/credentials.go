@@ -20,7 +20,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/triggermesh/tm/pkg/client"
+	"github.com/tryggth/tm/pkg/client"
 	"golang.org/x/crypto/ssh/terminal"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

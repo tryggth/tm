@@ -19,8 +19,8 @@ import (
 	"log"
 
 	"github.com/spf13/cobra"
-	"github.com/triggermesh/tm/cmd/describe"
-	"github.com/triggermesh/tm/pkg/client"
+	"github.com/tryggth/tm/cmd/describe"
+	"github.com/tryggth/tm/pkg/client"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

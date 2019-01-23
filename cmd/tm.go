@@ -21,12 +21,12 @@ import (
 	"log"
 
 	"github.com/spf13/cobra"
-	"github.com/triggermesh/tm/cmd/delete"
-	"github.com/triggermesh/tm/cmd/deploy"
-	"github.com/triggermesh/tm/cmd/describe"
-	"github.com/triggermesh/tm/cmd/get"
-	"github.com/triggermesh/tm/cmd/set"
-	"github.com/triggermesh/tm/pkg/client"
+	"github.com/tryggth/tm/cmd/delete"
+	"github.com/tryggth/tm/cmd/deploy"
+	"github.com/tryggth/tm/cmd/describe"
+	"github.com/tryggth/tm/cmd/get"
+	"github.com/tryggth/tm/cmd/set"
+	"github.com/tryggth/tm/pkg/client"
 
 	// Required for configs with gcp auth provider
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"

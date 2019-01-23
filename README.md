@@ -1,4 +1,4 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/triggermesh/tm)](https://goreportcard.com/report/github.com/triggermesh/tm) [![CircleCI](https://circleci.com/gh/triggermesh/tm/tree/master.svg?style=shield)](https://circleci.com/gh/triggermesh/tm/tree/master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/tryggth/tm)](https://goreportcard.com/report/github.com/tryggth/tm) [![CircleCI](https://circleci.com/gh/tryggth/tm/tree/master.svg?style=shield)](https://circleci.com/gh/tryggth/tm/tree/master)
 
 A CLI for [knative](https://github.com/knative)
 
@@ -7,10 +7,10 @@ A CLI for [knative](https://github.com/knative)
 With a working [Golang](https://golang.org/doc/install) environment do:
 
 ```
-go get github.com/triggermesh/tm
+go get github.com/tryggth/tm
 ```
 
-Or head to the GitHub [release page](https://github.com/triggermesh/tm/releases) and download a release.
+Or head to the GitHub [release page](https://github.com/tryggth/tm/releases) and download a release.
 
 ### Configuration
 
@@ -103,7 +103,7 @@ curl http://go-lambda.default.dev.triggermesh.io --data '{"Name": "Foo"}'
 
 ### Support
 
-We would love your feedback on this CLI tool so don't hesitate to let us know what is wrong and how we could improve it, just file an [issue](https://github.com/triggermesh/tm/issues/new)
+We would love your feedback on this CLI tool so don't hesitate to let us know what is wrong and how we could improve it, just file an [issue](https://github.com/tryggth/tm/issues/new)
 
 ### Code of Conduct
 

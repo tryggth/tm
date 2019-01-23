@@ -26,7 +26,7 @@ import (
 	"strings"
 
 	"github.com/mholt/archiver"
-	"github.com/triggermesh/tm/pkg/client"
+	"github.com/tryggth/tm/pkg/client"
 	"k8s.io/client-go/tools/remotecommand"
 )
 

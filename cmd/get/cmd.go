@@ -21,7 +21,7 @@ import (
 
 	"github.com/gosuri/uitable"
 	"github.com/spf13/cobra"
-	"github.com/triggermesh/tm/pkg/client"
+	"github.com/tryggth/tm/pkg/client"
 	yaml "gopkg.in/yaml.v2"
 )
 

@@ -21,9 +21,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/triggermesh/tm/cmd/delete"
-	"github.com/triggermesh/tm/pkg/client"
-	"github.com/triggermesh/tm/pkg/file"
+	"github.com/tryggth/tm/cmd/delete"
+	"github.com/tryggth/tm/pkg/client"
+	"github.com/tryggth/tm/pkg/file"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

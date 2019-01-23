@@ -16,7 +16,7 @@ package deploy
 
 import (
 	eventingApi "github.com/knative/eventing/pkg/apis/eventing/v1alpha1"
-	"github.com/triggermesh/tm/pkg/client"
+	"github.com/tryggth/tm/pkg/client"
 	corev1 "k8s.io/api/core/v1"
 	k8sErrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

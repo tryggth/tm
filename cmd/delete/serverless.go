@@ -21,8 +21,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/triggermesh/tm/pkg/client"
-	"github.com/triggermesh/tm/pkg/file"
+	"github.com/tryggth/tm/pkg/client"
+	"github.com/tryggth/tm/pkg/file"
 )
 
 // Service structure has minimal required set of fields to delete service
