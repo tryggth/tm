@@ -44,10 +44,6 @@
   name = "github.com/mholt/archiver"
   version = "v2.1.0"
 
-[prune]
-  go-tests = true
-  unused-packages = true
-
 [[constraint]]
   name = "github.com/knative/serving"
   version = "0.2.2"
